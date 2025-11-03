@@ -45,6 +45,45 @@ pipeline {
             }
         }
 
+        stage('Coverage report') {
+            agent {
+                docker {
+                    image 'python:3.11-slim'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh'''
+                python3 -m coverage run --source=. --omit=tests/* -m pytest tests
+                python3 -m coverage report -m
+                python3 -m coverage html
+                '''
+            }
+            post {
+                always {
+                    publishHTML(target:[
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        keepAll: true,
+                        reportDir: 'htmlcov',
+                        reportFiles: 'index.html',
+                        reportName: 'Coverage Report'
+                    ])
+                }
+            }
+        }
+
+        stage('Cyclomatic complexity analysis') {
+            agent {
+                docker {
+                    image 'python:3.11-slim'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh 'python3 -m radon cc . -a -s --exclude site-packages'
+            }
+        }
 
         stage('Deliver') {
             steps {
