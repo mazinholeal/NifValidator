@@ -40,11 +40,16 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent(credentials: ['cluster-crendentials']) {
-                    sh"""
-                    ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker rm -f ${JOB_BASE_NAME} || true
-                    ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker run -d --name ${JOB_BASE_NAME} -p 8080:9046 ${username}/${JOB_BASE_NAME}
-                    """
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-id',
+                    passwordVariable: 'passwd', 
+                    usernameVariable: 'username')]) {
+                    sshagent(credentials: ['cluster-crendentials']) {
+                        sh"""
+                        ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker rm -f ${JOB_BASE_NAME} || true
+                        ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker run -d --name ${JOB_BASE_NAME} -p 8080:9046 ${username}/${JOB_BASE_NAME}
+                        """
+                    }
                 }
             }
         }
