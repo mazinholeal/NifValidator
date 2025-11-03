@@ -110,6 +110,8 @@ pipeline {
                         sh 'python3 -m flake8 . --exclude site-packages --exit-zero'
                     }
                 }
+            }
+        }
 
         stage('Deliver') {
             steps {
