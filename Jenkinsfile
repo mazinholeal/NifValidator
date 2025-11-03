@@ -25,7 +25,23 @@ pipeline {
             }
         }
 
-        stage('Unit test')
+        stage('Unit test') {
+            agent {
+                 docker {
+                    image 'python:3.11-slim'
+                    reuseNode true
+                 } 
+            }
+            steps {
+                sh 'pytest --junitxml resulta.xml test/'
+            }
+            post {
+                always {
+                    archiveArtifacts artifacts: 'result.xml',
+                        fingerprint: true, junit: 'result.xml'
+                }
+            }
+        }
         
         stage('Deliver') {
             steps {
