@@ -17,11 +17,16 @@ pipeline {
             }
             steps {
                 sh"""
+                export PIP_DISABLE_PIP_VERSION_CHECK=1
+                export PATH="$HOME/.local/bin:${PATH}"
                 pip install -r requirements.txt
+                pip install -r requirements-test.txt
                 """
             }
         }
 
+        stage('Unit test')
+        
         stage('Deliver') {
             steps {
                 withCredentials([usernamePassword(
