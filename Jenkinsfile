@@ -1,0 +1,52 @@
+#!groovy
+
+pipeline {
+    agent any
+    environment {
+        HOME = "${env.WORKSPACE}"
+    }
+
+    stages {
+
+        stage('Docker environment') {
+            agent {
+                docker {
+                    image 'python:3.11-slim'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh"""
+                pip install -r requirements.txt
+                """
+            }
+        }
+
+        stage('Deliver') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'docker-id',
+                    passwordVariable: 'passwd', 
+                    usernameVariable: 'username')]) {
+                        sh"""
+                        printenv
+                        docker build -t ${username}/${JOB_BASE_NAME} .
+                        docker login -u ${username} -p ${passwd}
+                        docker push ${username}/${JOB_BASE_NAME}
+                        """
+               }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sshagent(credentials: ['cluster-crendentials']) {
+                    sh"""
+                    ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker rm -f ${JOB_BASE_NAME} || true
+                    ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker run -d --name ${JOB_BASE_NAME} -p 8080:9046 ${username}/${JOB_BASE_NAME}
+                    """
+                }
+            }
+        }
+    }
+}
