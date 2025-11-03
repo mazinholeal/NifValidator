@@ -1,0 +1,520 @@
+Started by GitHub push by cfreire
+Obtained Jenkinsfile from git https://github.com/cfreire/NifValidator.git
+[Pipeline] Start of Pipeline
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/nif-validator
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/nif-validator/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/cfreire/NifValidator.git # timeout=10
+Fetching upstream changes from https://github.com/cfreire/NifValidator.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/cfreire/NifValidator.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision bb0c1cb72b07cc8e7631148464cb3552b835ccff (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f bb0c1cb72b07cc8e7631148464cb3552b835ccff # timeout=10
+Commit message: "Fix Quality analysis"
+ > git rev-list --no-walk 55d300252035f2a1b9428603364bcaeacb0b9f98 # timeout=10
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Docker environment)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . python:3.11-slim
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 84884fa96d4bac96d905908ef1c1712c095813105fa996433536d57fbc3bff82
+but /var/jenkins_home/workspace/nif-validator could not be found among []
+but /var/jenkins_home/workspace/nif-validator@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nif-validator -v /var/jenkins_home/workspace/nif-validator:/var/jenkins_home/workspace/nif-validator:rw,z -v /var/jenkins_home/workspace/nif-validator@tmp:/var/jenkins_home/workspace/nif-validator@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** python:3.11-slim cat
+$ docker top c16709d713bb1cbb63a7966fc56deef029223bf7527acf8311491804368eaf10 -eo pid,comm
+[Pipeline] {
+[Pipeline] sh
++ export PIP_DISABLE_PIP_VERSION_CHECK=1
++ export PATH=/var/jenkins_home/workspace/nif-validator/.local/bin:/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
++ pip install -r requirements.txt
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: flask in ./.local/lib/python3.11/site-packages (from -r requirements.txt (line 1)) (3.1.2)
+Requirement already satisfied: blinker>=1.9.0 in ./.local/lib/python3.11/site-packages (from flask->-r requirements.txt (line 1)) (1.9.0)
+Requirement already satisfied: click>=8.1.3 in ./.local/lib/python3.11/site-packages (from flask->-r requirements.txt (line 1)) (8.3.0)
+Requirement already satisfied: itsdangerous>=2.2.0 in ./.local/lib/python3.11/site-packages (from flask->-r requirements.txt (line 1)) (2.2.0)
+Requirement already satisfied: jinja2>=3.1.2 in ./.local/lib/python3.11/site-packages (from flask->-r requirements.txt (line 1)) (3.1.6)
+Requirement already satisfied: markupsafe>=2.1.1 in ./.local/lib/python3.11/site-packages (from flask->-r requirements.txt (line 1)) (3.0.3)
+Requirement already satisfied: werkzeug>=3.1.0 in ./.local/lib/python3.11/site-packages (from flask->-r requirements.txt (line 1)) (3.1.3)
++ pip install -r requirements-test.txt
+Defaulting to user installation because normal site-packages is not writeable
+Requirement already satisfied: pytest in ./.local/lib/python3.11/site-packages (from -r requirements-test.txt (line 1)) (8.4.2)
+Requirement already satisfied: flake8 in ./.local/lib/python3.11/site-packages (from -r requirements-test.txt (line 2)) (7.3.0)
+Requirement already satisfied: coverage in ./.local/lib/python3.11/site-packages (from -r requirements-test.txt (line 3)) (7.11.0)
+Requirement already satisfied: radon in ./.local/lib/python3.11/site-packages (from -r requirements-test.txt (line 4)) (6.0.1)
+Requirement already satisfied: iniconfig>=1 in ./.local/lib/python3.11/site-packages (from pytest->-r requirements-test.txt (line 1)) (2.3.0)
+Requirement already satisfied: packaging>=20 in ./.local/lib/python3.11/site-packages (from pytest->-r requirements-test.txt (line 1)) (25.0)
+Requirement already satisfied: pluggy<2,>=1.5 in ./.local/lib/python3.11/site-packages (from pytest->-r requirements-test.txt (line 1)) (1.6.0)
+Requirement already satisfied: pygments>=2.7.2 in ./.local/lib/python3.11/site-packages (from pytest->-r requirements-test.txt (line 1)) (2.19.2)
+Requirement already satisfied: mccabe<0.8.0,>=0.7.0 in ./.local/lib/python3.11/site-packages (from flake8->-r requirements-test.txt (line 2)) (0.7.0)
+Requirement already satisfied: pycodestyle<2.15.0,>=2.14.0 in ./.local/lib/python3.11/site-packages (from flake8->-r requirements-test.txt (line 2)) (2.14.0)
+Requirement already satisfied: pyflakes<3.5.0,>=3.4.0 in ./.local/lib/python3.11/site-packages (from flake8->-r requirements-test.txt (line 2)) (3.4.0)
+Requirement already satisfied: mando<0.8,>=0.6 in ./.local/lib/python3.11/site-packages (from radon->-r requirements-test.txt (line 4)) (0.7.1)
+Requirement already satisfied: colorama>=0.4.1 in ./.local/lib/python3.11/site-packages (from radon->-r requirements-test.txt (line 4)) (0.4.6)
+Requirement already satisfied: six in ./.local/lib/python3.11/site-packages (from mando<0.8,>=0.6->radon->-r requirements-test.txt (line 4)) (1.17.0)
+[Pipeline] }
+$ docker stop --time=1 c16709d713bb1cbb63a7966fc56deef029223bf7527acf8311491804368eaf10
+$ docker rm -f --volumes c16709d713bb1cbb63a7966fc56deef029223bf7527acf8311491804368eaf10
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Unit test)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . python:3.11-slim
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 84884fa96d4bac96d905908ef1c1712c095813105fa996433536d57fbc3bff82
+but /var/jenkins_home/workspace/nif-validator could not be found among []
+but /var/jenkins_home/workspace/nif-validator@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nif-validator -v /var/jenkins_home/workspace/nif-validator:/var/jenkins_home/workspace/nif-validator:rw,z -v /var/jenkins_home/workspace/nif-validator@tmp:/var/jenkins_home/workspace/nif-validator@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** python:3.11-slim cat
+$ docker top 7d4c4465759846fd80337deec2564cd06975d531805b7d831a848078f1cb3c2e -eo pid,comm
+[Pipeline] {
+[Pipeline] sh
++ python3 -m pytest --junitxml result.xml tests/
+============================= test session starts ==============================
+platform linux -- Python 3.11.14, pytest-8.4.2, pluggy-1.6.0
+rootdir: /var/jenkins_home/workspace/nif-validator
+collected 4 items
+
+tests/test_nif_validator.py ....                                         [100%]
+
+--- generated xml file: /var/jenkins_home/workspace/nif-validator/result.xml ---
+============================== 4 passed in 0.03s ===============================
+Post stage
+[Pipeline] archiveArtifacts
+Archiving artifacts
+[Pipeline] junit
+Recording test results
+[Checks API] No suitable checks publisher found.
+[Pipeline] }
+$ docker stop --time=1 7d4c4465759846fd80337deec2564cd06975d531805b7d831a848078f1cb3c2e
+$ docker rm -f --volumes 7d4c4465759846fd80337deec2564cd06975d531805b7d831a848078f1cb3c2e
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Coverage report)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . python:3.11-slim
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 84884fa96d4bac96d905908ef1c1712c095813105fa996433536d57fbc3bff82
+but /var/jenkins_home/workspace/nif-validator could not be found among []
+but /var/jenkins_home/workspace/nif-validator@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nif-validator -v /var/jenkins_home/workspace/nif-validator:/var/jenkins_home/workspace/nif-validator:rw,z -v /var/jenkins_home/workspace/nif-validator@tmp:/var/jenkins_home/workspace/nif-validator@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** python:3.11-slim cat
+$ docker top 9ca41cb23469a8c25ec3556a1ca53ea309404340f6db2b46b7f7d27e50c0b97f -eo pid,comm
+[Pipeline] {
+[Pipeline] sh
++ python3 -m coverage run --source=. --omit=tests/* -m pytest tests
+============================= test session starts ==============================
+platform linux -- Python 3.11.14, pytest-8.4.2, pluggy-1.6.0
+rootdir: /var/jenkins_home/workspace/nif-validator
+collected 4 items
+
+tests/test_nif_validator.py ....                                         [100%]
+
+============================== 4 passed in 0.04s ===============================
++ python3 -m coverage report -m
+Name               Stmts   Miss  Cover   Missing
+------------------------------------------------
+app.py                12     12     0%   1-16
+nif_validator.py      10      0   100%
+------------------------------------------------
+TOTAL                 22     12    45%
++ python3 -m coverage html
+Wrote HTML report to htmlcov/index.html
+Post stage
+[Pipeline] publishHTML
+[htmlpublisher] Archiving HTML reports...
+[htmlpublisher] Archiving at BUILD level /var/jenkins_home/workspace/nif-validator/htmlcov to Coverage_20Report
+[htmlpublisher] Copying recursive using current thread
+[Pipeline] }
+$ docker stop --time=1 9ca41cb23469a8c25ec3556a1ca53ea309404340f6db2b46b7f7d27e50c0b97f
+$ docker rm -f --volumes 9ca41cb23469a8c25ec3556a1ca53ea309404340f6db2b46b7f7d27e50c0b97f
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Cyclomatic complexity analysis)
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
++ docker inspect -f . python:3.11-slim
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 84884fa96d4bac96d905908ef1c1712c095813105fa996433536d57fbc3bff82
+but /var/jenkins_home/workspace/nif-validator could not be found among []
+but /var/jenkins_home/workspace/nif-validator@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nif-validator -v /var/jenkins_home/workspace/nif-validator:/var/jenkins_home/workspace/nif-validator:rw,z -v /var/jenkins_home/workspace/nif-validator@tmp:/var/jenkins_home/workspace/nif-validator@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** python:3.11-slim cat
+$ docker top 49025bf326229fe0b249e301e72a8751e5b4f11dc9628abcc700c484d3d9e518 -eo pid,comm
+[Pipeline] {
+[Pipeline] sh
++ python3 -m radon cc . -a -s --exclude site-packages
+app.py
+    F 7:0 my_form - A (1)
+    F 11:0 my_form_post - A (1)
+nif_validator.py
+    F 3:0 valida_nif - B (6)
+tests/test_nif_validator.py
+    F 4:0 test_positive - A (3)
+    F 11:0 test_marked - A (3)
+    F 17:0 test_negative - A (3)
+    F 24:0 test_dummy - A (3)
+
+7 blocks (classes, functions, methods) analyzed.
+Average complexity: A (2.857142857142857)
+[Pipeline] }
+$ docker stop --time=1 49025bf326229fe0b249e301e72a8751e5b4f11dc9628abcc700c484d3d9e518
+$ docker rm -f --volumes 49025bf326229fe0b249e301e72a8751e5b4f11dc9628abcc700c484d3d9e518
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Quality Analysis)
+[Pipeline] parallel
+[Pipeline] { (Branch: Integration tests)
+[Pipeline] { (Branch: User Interface tests)
+[Pipeline] { (Branch: PEP8 Verification)
+[Pipeline] stage
+[Pipeline] { (Integration tests)
+[Pipeline] stage
+[Pipeline] { (User Interface tests)
+[Pipeline] stage
+[Pipeline] { (PEP8 Verification)
+[Pipeline] node
+Running on Jenkins in /var/jenkins_home/workspace/nif-validator@2
+[Pipeline] node
+[Pipeline] getContext
+[Pipeline] isUnix
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] {
+[Pipeline] sh
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/nif-validator@2/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/cfreire/NifValidator.git # timeout=10
+Fetching upstream changes from https://github.com/cfreire/NifValidator.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/cfreire/NifValidator.git +refs/heads/*:refs/remotes/origin/* # timeout=10
++ docker inspect -f . python:3.11-slim
+.
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] withDockerContainer
+Jenkins seems to be running inside container 84884fa96d4bac96d905908ef1c1712c095813105fa996433536d57fbc3bff82
+but /var/jenkins_home/workspace/nif-validator could not be found among []
+but /var/jenkins_home/workspace/nif-validator@tmp could not be found among []
+$ docker run -t -d -u 1000:1000 -w /var/jenkins_home/workspace/nif-validator -v /var/jenkins_home/workspace/nif-validator:/var/jenkins_home/workspace/nif-validator:rw,z -v /var/jenkins_home/workspace/nif-validator@tmp:/var/jenkins_home/workspace/nif-validator@tmp:rw,z -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** -e ******** python:3.11-slim cat
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision bb0c1cb72b07cc8e7631148464cb3552b835ccff (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+ > git checkout -f bb0c1cb72b07cc8e7631148464cb3552b835ccff # timeout=10
+Commit message: "Fix Quality analysis"
+$ docker top 9ddb354ec754daea33d6be8d8587960ad1aeb45753906e9b2a25c077aef95b08 -eo pid,comm
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] sh
+[Pipeline] echo
+TODO Integration tests
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
++ python3 -m flake8 . --exclude site-packages --exit-zero
+Running on Jenkins in /var/jenkins_home/workspace/nif-validator@2
+[Pipeline] // node
+[Pipeline] }
+[Pipeline] {
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] checkout
+Selected Git installation does not exist. Using Default
+The recommended git tool is: NONE
+No credentials specified
+ > git rev-parse --resolve-git-dir /var/jenkins_home/workspace/nif-validator@2/.git # timeout=10
+Fetching changes from the remote Git repository
+ > git config remote.origin.url https://github.com/cfreire/NifValidator.git # timeout=10
+Fetching upstream changes from https://github.com/cfreire/NifValidator.git
+ > git --version # timeout=10
+ > git --version # 'git version 2.47.3'
+ > git fetch --tags --force --progress -- https://github.com/cfreire/NifValidator.git +refs/heads/*:refs/remotes/origin/* # timeout=10
+ > git rev-parse refs/remotes/origin/main^{commit} # timeout=10
+Checking out Revision bb0c1cb72b07cc8e7631148464cb3552b835ccff (refs/remotes/origin/main)
+ > git config core.sparsecheckout # timeout=10
+./app.py:6:1: E302 expected 2 blank lines, found 1
+./app.py:10:1: E302 expected 2 blank lines, found 1
+./app.py:16:1: E305 expected 2 blank lines after class or function definition, found 1
+./nif_validator.py:3:1: E302 expected 2 blank lines, found 1
+./nif_validator.py:5:32: W291 trailing whitespace
+./nif_validator.py:7:32: W291 trailing whitespace
+./nif_validator.py:9:32: W291 trailing whitespace
+./nif_validator.py:13:63: W291 trailing whitespace
+./nif_validator.py:15:80: E501 line too long (86 > 79 characters)
+./nif_validator.py:21:1: E305 expected 2 blank lines after class or function definition, found 1
+./nif_validator.py:21:27: E261 at least two spaces before inline comment
+./tests/test_nif_validator.py:12:22: E231 missing whitespace after ','
+./tests/test_nif_validator.py:17:1: E302 expected 2 blank lines, found 1
+./tests/test_nif_validator.py:18:80: E501 line too long (95 > 79 characters)
+./tests/test_nif_validator.py:21:42: E712 comparison to False should be 'if cond is False:' or 'if not cond:'
+./tests/test_nif_validator.py:25:80: E501 line too long (83 > 79 characters)
+./tests/test_nif_validator.py:25:84: W291 trailing whitespace
+./tests/test_nif_validator.py:30:42: E712 comparison to False should be 'if cond is False:' or 'if not cond:'
+ > git checkout -f bb0c1cb72b07cc8e7631148464cb3552b835ccff # timeout=10
+Commit message: "Fix Quality analysis"
+[Pipeline] }
+$ docker stop --time=1 9ddb354ec754daea33d6be8d8587960ad1aeb45753906e9b2a25c077aef95b08
+$ docker rm -f --volumes 9ddb354ec754daea33d6be8d8587960ad1aeb45753906e9b2a25c077aef95b08
+[Pipeline] // withDockerContainer
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] echo
+TODO UI Tests
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // parallel
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Deliver)
+[Pipeline] withCredentials
+Masking supported pattern matches of $passwd
+[Pipeline] {
+[Pipeline] sh
+Warning: A secret was passed to "sh" using Groovy String interpolation, which is insecure.
+		 Affected argument(s) used the following variable(s): [passwd]
+		 See https://jenkins.io/redirect/groovy-string-interpolation for details.
++ printenv
+JENKINS_HOME=/var/jenkins_home
+GIT_PREVIOUS_SUCCESSFUL_COMMIT=55d300252035f2a1b9428603364bcaeacb0b9f98
+JENKINS_UC_EXPERIMENTAL=https://updates.jenkins.io/experimental
+CI=true
+HOSTNAME=84884fa96d4b
+RUN_CHANGES_DISPLAY_URL=http://3.122.255.70:8080/job/nif-validator/28/display/redirect?page=changes
+NODE_LABELS=built-in
+HUDSON_URL=http://3.122.255.70:8080/
+SHLVL=0
+GIT_COMMIT=bb0c1cb72b07cc8e7631148464cb3552b835ccff
+username=cfreire70
+HOME=/var/jenkins_home/workspace/nif-validator
+BUILD_URL=http://3.122.255.70:8080/job/nif-validator/28/
+HUDSON_COOKIE=f219d865-b807-4c34-b042-a03f53a8533b
+JENKINS_SERVER_COOKIE=durable-f8232cecc6bd4d1fff8d1e8f6873ce86184b32defbc499c168ea92a20dbd6c20
+JENKINS_UC=https://updates.jenkins.io
+DOCKER_TLS_VERIFY=1
+REF=/usr/share/jenkins/ref
+WORKSPACE=/var/jenkins_home/workspace/nif-validator
+NODE_NAME=built-in
+RUN_ARTIFACTS_DISPLAY_URL=http://3.122.255.70:8080/job/nif-validator/28/display/redirect?page=artifacts
+STAGE_NAME=Deliver
+GIT_BRANCH=origin/main
+EXECUTOR_NUMBER=0
+BUILD_DISPLAY_NAME=#28
+JENKINS_INCREMENTALS_REPO_MIRROR=https://repo.jenkins-ci.org/incrementals
+JENKINS_VERSION=2.534
+RUN_TESTS_DISPLAY_URL=http://3.122.255.70:8080/job/nif-validator/28/display/redirect?page=tests
+DOCKER_CERT_PATH=/certs/client
+HUDSON_HOME=/var/jenkins_home
+JOB_BASE_NAME=nif-validator
+PATH=/opt/java/openjdk/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+BUILD_ID=28
+BUILD_TAG=jenkins-nif-validator-28
+LANG=C.UTF-8
+JENKINS_URL=http://3.122.255.70:8080/
+JOB_URL=http://3.122.255.70:8080/job/nif-validator/
+GIT_URL=https://github.com/cfreire/NifValidator.git
+BUILD_NUMBER=28
+JENKINS_NODE_COOKIE=2f0aa2f6-1d87-4d18-b5af-7ef441d4c48d
+JENKINS_SLAVE_AGENT_PORT=50000
+RUN_DISPLAY_URL=http://3.122.255.70:8080/job/nif-validator/28/display/redirect
+HUDSON_SERVER_COOKIE=736730bf6fbe5472
+DOCKER_HOST=tcp://docker:2376
+JOB_DISPLAY_URL=http://3.122.255.70:8080/job/nif-validator/display/redirect
+JOB_NAME=nif-validator
+passwd=****
+COPY_REFERENCE_FILE_LOG=/var/jenkins_home/copy_reference_file.log
+JAVA_HOME=/opt/java/openjdk
+PWD=/var/jenkins_home/workspace/nif-validator
+GIT_PREVIOUS_COMMIT=55d300252035f2a1b9428603364bcaeacb0b9f98
+WORKSPACE_TMP=/var/jenkins_home/workspace/nif-validator@tmp
++ docker build -t cfreire70/nif-validator .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 457B done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/python:3.11-slim
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context:
+#3 transferring context: 2B done
+#3 DONE 0.1s
+
+#4 [1/6] FROM docker.io/library/python:3.11-slim
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 502.91kB 0.2s done
+#5 DONE 0.3s
+
+#6 [2/6] RUN useradd -m user
+#6 CACHED
+
+#7 [3/6] WORKDIR /home/user
+#7 CACHED
+
+#8 [4/6] COPY --chown=user:user requirements.txt .
+#8 CACHED
+
+#9 [5/6] RUN pip install --user -r requirements.txt
+#9 CACHED
+
+#10 [6/6] COPY --chown=user:user . .
+#10 DONE 1.7s
+
+#11 exporting to image
+#11 exporting layers
+#11 exporting layers 0.5s done
+#11 writing image sha256:852fdeb227e66f13bb2b4cd737c76b91f743f6e8ef9734180daf60732eb4c946 0.0s done
+#11 naming to docker.io/cfreire70/nif-validator 0.0s done
+#11 DONE 0.6s
++ docker login -u cfreire70 -p ****
+WARNING! Using --password via the CLI is insecure. Use --password-stdin.
+Login Succeeded
++ docker push cfreire70/nif-validator
+Using default tag: latest
+The push refers to repository [docker.io/cfreire70/nif-validator]
+3a9d5ea9a168: Preparing
+8817da8a06fc: Preparing
+ace4cfa0bb63: Preparing
+5f70bf18a086: Preparing
+c2a23673b72a: Preparing
+235e81929876: Preparing
+9ba402f61141: Preparing
+15eb6aec49b3: Preparing
+d7c97cb6f1fe: Preparing
+235e81929876: Waiting
+9ba402f61141: Waiting
+15eb6aec49b3: Waiting
+d7c97cb6f1fe: Waiting
+c2a23673b72a: Layer already exists
+8817da8a06fc: Layer already exists
+ace4cfa0bb63: Layer already exists
+5f70bf18a086: Layer already exists
+235e81929876: Layer already exists
+15eb6aec49b3: Layer already exists
+d7c97cb6f1fe: Layer already exists
+9ba402f61141: Layer already exists
+3a9d5ea9a168: Pushed
+latest: digest: sha256:d5e4797a93a673497a1a4cdd72e296224571b535948ed2e1b3052303123ea9a3 size: 2203
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Beta testing)
+[Pipeline] withCredentials
+Masking supported pattern matches of $passwd
+[Pipeline] {
+[Pipeline] sshagent
+[ssh-agent] Using credentials redhat
+$ ssh-agent
+SSH_AUTH_SOCK=/tmp/ssh-td7FidSI8A9d/agent.6358
+SSH_AGENT_PID=6361
+Running ssh-add (command line suppressed)
+Identity added: /var/jenkins_home/workspace/nif-validator@tmp/private_key_11124353602450755494.key (aws-rhel-key-20241125)
+[ssh-agent] Started.
+[Pipeline] {
+[Pipeline] sh
++ ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker rm -f nif-validator
+nif-validator
++ ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker run -d --name nif-validator -p 8080:9046 --pull always cfreire70/nif-validator
+latest: Pulling from cfreire70/nif-validator
+38513bd72563: Already exists
+a9ffe18d7fdb: Already exists
+e73850a50582: Already exists
+19fb8589da02: Already exists
+1bc70d7964d5: Already exists
+4f4fb700ef54: Already exists
+f0b8fa197d75: Already exists
+648ee0c49c59: Already exists
+24c576e4a56c: Pulling fs layer
+24c576e4a56c: Verifying Checksum
+24c576e4a56c: Download complete
+24c576e4a56c: Pull complete
+Digest: sha256:d5e4797a93a673497a1a4cdd72e296224571b535948ed2e1b3052303123ea9a3
+Status: Downloaded newer image for cfreire70/nif-validator:latest
+7c2f430ebfd6b085ecda95a0029f27370469f23d36547dee36b462882fc9f2f4
+[Pipeline] }
+$ ssh-agent -k
+unset SSH_AUTH_SOCK;
+unset SSH_AGENT_PID;
+echo Agent pid 6361 killed;
+[ssh-agent] Stopped.
+[Pipeline] // sshagent
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
