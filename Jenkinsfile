@@ -27,22 +27,25 @@ pipeline {
 
         stage('Unit test') {
             agent {
-                 docker {
+               docker {
                     image 'python:3.11-slim'
                     reuseNode true
-                 } 
+                }
             }
             steps {
-                sh 'pytest --junitxml resulta.xml test/'
+                sh 'python3 -m pytest --junitxml result.xml tests/'
             }
             post {
                 always {
-                    archiveArtifacts artifacts: 'result.xml',
-                        fingerprint: true, junit: 'result.xml'
+                // Archive the test results as artifacts
+                archiveArtifacts artifacts: 'result.xml', allowEmptyArchive: true
+                // Publish JUnit test results
+                junit 'result.xml'
                 }
             }
         }
-        
+
+
         stage('Deliver') {
             steps {
                 withCredentials([usernamePassword(
@@ -59,7 +62,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Beta testing') {
             steps {
                 withCredentials([usernamePassword(
                     credentialsId: 'docker-id',
@@ -68,7 +71,7 @@ pipeline {
                     sshagent(credentials: ['cluster-crendentials']) {
                         sh"""
                         ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker rm -f ${JOB_BASE_NAME} || true
-                        ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker run -d --name ${JOB_BASE_NAME} -p 8080:9046 ${username}/${JOB_BASE_NAME}
+                        ssh -o StrictHostKeyChecking=no redhat@172.31.33.7 docker run -d --name ${JOB_BASE_NAME} -p 8080:9046 --pull always ${username}/${JOB_BASE_NAME}
                         """
                     }
                 }
